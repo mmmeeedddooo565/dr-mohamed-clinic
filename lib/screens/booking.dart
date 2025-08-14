@@ -105,7 +105,6 @@ class _BookingScreenState extends State<BookingScreen> {
             const SizedBox(height: 8),
             TextField(controller: _name, decoration: const InputDecoration(border: OutlineInputBorder(), labelText: 'الاسم')),
             const SizedBox(height: 8),
-            Directionality(,
               child: TextField(controller: _phone, keyboardType: TextInputType.phone,
                 decoration: const InputDecoration(border: OutlineInputBorder(), labelText: 'Phone (+02...)')),
             ),
