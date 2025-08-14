@@ -86,7 +86,7 @@ class _BookingScreenState extends State<BookingScreen> {
                   onPressed: full ? null : (){ setState(()=> _selectedTime = t); },
                   child: Text(
                     full ? '$t (مكتمل)' : '$t (متاح: $remaining/3)',
-                    textDirection: TextDirection.ltr,
+                    
                     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 13),
                   ),
                 ),
