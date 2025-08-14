@@ -1,0 +1,34 @@
+name: Build Flutter APK
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Prepare project
+        run: |
+          rm -f pubspec.lock
+          flutter pub get
+          flutter create .
+          # تعديل اسم التطبيق الظاهر تحت الأيقونة:
+          sed -i 's/android:label="[^"]*"/android:label="عيادة د. محمد إسماعيل"/' android/app/src/main/AndroidManifest.xml || true
+          # توليد أيقونة الإطلاق من assets/app_icon.png
+          flutter pub run flutter_launcher_icons
+
+      - name: Build release APK
+        run: flutter build apk --release
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
