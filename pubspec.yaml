@@ -2,7 +2,9 @@ name: esmail_clinic_app
 description: Esmail Clinic Arabic booking app (RTL + embedded Arabic font)
 publish_to: "none"
 version: 1.4.0+7
-
+flutter clean
+flutter pub get
+flutter create .
 environment:
   sdk: ">=2.17.0 <4.0.0"
 
