@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:ui' as ui; // لاستخدام ui.TextDirection.ltr
 
 const List<int> allowedWeekdays = [
   DateTime.saturday,
@@ -86,27 +87,25 @@ class _BookingScreenState extends State<BookingScreen> {
                   _selectedDate == null
                       ? 'اختر التاريخ'
                       : DateFormat('yyyy-MM-dd').format(_selectedDate!),
-                  textDirection: TextDirection.ltr,
+                  textDirection: ui.TextDirection.ltr,
                 ),
               ),
               const SizedBox(height: 12),
-              const Text('اختيار الميعاد',
-                  style: TextStyle(fontWeight: FontWeight.w700)),
+              const Text('اختيار الميعاد', style: TextStyle(fontWeight: FontWeight.w700)),
               const SizedBox(height: 8),
               Wrap(
                 spacing: 10,
                 children: slotTimes.map((t) {
                   final isSel = t == _selectedTime;
                   return ChoiceChip(
-                    label: Text(t, textDirection: TextDirection.ltr),
+                    label: Text(t, textDirection: ui.TextDirection.ltr),
                     selected: isSel,
                     onSelected: (_) => setState(() => _selectedTime = t),
                   );
                 }).toList(),
               ),
               const SizedBox(height: 16),
-              const Text('نوع الزيارة',
-                  style: TextStyle(fontWeight: FontWeight.w700)),
+              const Text('نوع الزيارة', style: TextStyle(fontWeight: FontWeight.w700)),
               const SizedBox(height: 8),
               DropdownButton<String>(
                 isExpanded: true,
@@ -122,33 +121,29 @@ class _BookingScreenState extends State<BookingScreen> {
                   minimumSize: const Size(double.infinity, 56),
                   backgroundColor: const Color(0xFF8E0D2A),
                 ),
-                onPressed:
-                    (_selectedDate == null || _selectedTime == null)
-                        ? null
-                        : () async {
-                            if (_dayClosed) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('الحجز مغلق اليوم')),
-                              );
-                              return;
-                            }
-                            final c = await _currentCountFor(
-                                _selectedDate!, _selectedTime!);
-                            if (c >= capacityPerSlot) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('الموعد ممتلئ، اختر ميعادًا آخر')),
-                              );
-                              return;
-                            }
-                            await _incrementCount(
-                                _selectedDate!, _selectedTime!);
-                            if (!mounted) return;
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('تم تأكيد الحجز')),
-                            );
-                            Navigator.pop(context);
-                          },
+                onPressed: (_selectedDate == null || _selectedTime == null)
+                    ? null
+                    : () async {
+                        if (_dayClosed) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('الحجز مغلق اليوم')),
+                          );
+                          return;
+                        }
+                        final c = await _currentCountFor(_selectedDate!, _selectedTime!);
+                        if (c >= capacityPerSlot) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('الموعد ممتلئ، اختر ميعادًا آخر')),
+                          );
+                          return;
+                        }
+                        await _incrementCount(_selectedDate!, _selectedTime!);
+                        if (!mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('تم تأكيد الحجز')),
+                        );
+                        Navigator.pop(context);
+                      },
                 child: const Text('تأكيد الحجز'),
               ),
             ],
