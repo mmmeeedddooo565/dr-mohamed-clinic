@@ -1,0 +1,19 @@
+workflows:
+  android_release_apk:
+    name: Android Release APK
+    instance_type: linux
+    environment:
+      flutter: stable
+    scripts:
+      - name: Prepare project
+        script: |
+          rm -f pubspec.lock
+          flutter pub get
+          flutter create .
+          sed -i 's/android:label="[^"]*"/android:label="عيادة د. محمد إسماعيل"/' android/app/src/main/AndroidManifest.xml || true
+          flutter pub run flutter_launcher_icons
+      - name: Build release APK
+        script: |
+          flutter build apk --release
+    artifacts:
+      - build/app/outputs/flutter-apk/app-release.apk
